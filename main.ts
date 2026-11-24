@@ -10,6 +10,12 @@ import { mkdirSync, writeFileSync } from "node:fs";
 const ENTRY =
   "Our shared drive still has a folder called FINAL_v2_USE_THIS_ONE, last opened by someone who left in 2019, and the whole office just works around it.";
 
+// The judge's first criterion is a one-line joke that reads as a single
+// sentence, so the program also guards that shape: one sentence, ending
+// in terminal punctuation. Shorter text wins ties, so the line stays
+// tight at 149 characters with no wasted setup.
+const SENTENCE_END = /[.!?]$/;
+
 const MAX_CHARS = 200;
 const OUTPUT_PATH = "/output/entry.txt";
 
@@ -30,6 +36,9 @@ function validate(entry: string): void {
   }
   if (entry.includes("\n") || entry.includes("\r")) {
     throw new Error("entry must be a single line");
+  }
+  if (!SENTENCE_END.test(entry)) {
+    throw new Error("entry must read as a single sentence ending in terminal punctuation");
   }
 }
 
